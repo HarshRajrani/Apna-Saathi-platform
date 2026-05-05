@@ -3,21 +3,20 @@ import axios from 'axios';
 /**
  * DemoUtility provides a one-click authentication mechanism for the recruiter/demo view.
  * It bypasses manual input and logs in as a pre-configured demo user based on the requested role.
+ *
+ * NOTE: Demo credentials are read from environment variables (VITE_DEMO_PASSWORD).
+ * Set this in your .env file to match the SEED_PASSWORD used when seeding the database.
  */
 
-export const triggerDemoLogin = async (role, loginUser, navigate) => {
-  const demoCredentials = {
-    business: {
-      email: 'rajesh@apnasaathi.com',
-      password: 'business123',
-    },
-    rider: {
-      email: 'suresh@apnasaathi.com',
-      password: 'rider123',
-    },
-  };
+const DEMO_PASSWORD = import.meta.env.VITE_DEMO_PASSWORD || 'changeme';
 
-  const credentials = demoCredentials[role];
+const DEMO_ACCOUNTS = {
+  business: { email: 'rajesh@apnasaathi.com', password: DEMO_PASSWORD },
+  rider: { email: 'suresh@apnasaathi.com', password: DEMO_PASSWORD },
+};
+
+export const triggerDemoLogin = async (role, loginUser, navigate) => {
+  const credentials = DEMO_ACCOUNTS[role];
   if (!credentials) return;
 
   try {

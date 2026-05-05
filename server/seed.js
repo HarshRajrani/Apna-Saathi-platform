@@ -19,6 +19,9 @@ const Invoice = require('./models/Invoice');
 
 dotenv.config();
 
+// Demo seed password — stored in .env, never hardcoded
+const SEED_PASSWORD = process.env.SEED_PASSWORD || 'changeme';
+
 const seedDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -39,7 +42,7 @@ const seedDB = async () => {
     const adminUser = await User.create({
       name: 'Admin User',
       email: 'admin@apnasaathi.com',
-      password: 'admin123',
+      password: SEED_PASSWORD,
       role: 'admin',
       phone: '9876543210',
     });
@@ -47,7 +50,7 @@ const seedDB = async () => {
     const businessUser1 = await User.create({
       name: 'Rajesh Kumar',
       email: 'rajesh@apnasaathi.com',
-      password: 'business123',
+      password: SEED_PASSWORD,
       role: 'business',
       phone: '9876543211',
     });
@@ -71,7 +74,7 @@ const seedDB = async () => {
     const riderUser1 = await User.create({
       name: 'Suresh M',
       email: 'suresh@apnasaathi.com',
-      password: 'rider123',
+      password: SEED_PASSWORD,
       role: 'rider',
       phone: '9876543220',
     });
@@ -443,10 +446,7 @@ const seedDB = async () => {
     ║   🏍️  Riders: 4                                 ║
     ║   📦 Orders: ${orders.length}                                ║
     ║   🧾 Invoices: 1                                ║
-    ║                                                ║
-    ║   🔐 Admin Login:                               ║
-    ║      Email: admin@deliveryplatform.com          ║
-    ║      Pass:  admin123                            ║
+    ║   🔐 Credentials: Use SEED_PASSWORD from .env   ║
     ║                                                ║
     ╚════════════════════════════════════════════════╝
     `);
