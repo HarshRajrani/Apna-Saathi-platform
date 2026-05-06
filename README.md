@@ -439,6 +439,110 @@ Apna-Saathi-platform/
 
 ---
 
+## 🖼️ Screenshots
+
+### 🏠 Landing Page & Hero Section
+![Landing Page Hero](client/public/Screenshots/landing-hero.png.png)
+*The landing page features a sleek dark-themed design with a high-contrast Saffron accent, emphasizing the "Smart Delivery Engine" that powers the platform.*
+
+### 📍 Haversine Proximity Clustering
+![Haversine Engine](client/public/Screenshots/landing-cluster.png.png)
+*Our custom Haversine engine groups scattered orders in real-time. This clustering logic reduces fuel costs by up to 40% and speeds up delivery times by 50%.*
+
+### 👥 Dual-Portal Architecture
+![Portals](client/public/Screenshots/landing-portals.png.png)
+*A unified platform with two distinct perspectives: The **Merchant Portal** for order creation and analytics, and the **Rider Application** for optimized multi-stop routing.*
+
+### 🛡️ Privacy-First Shadow IDs
+![Privacy System](client/public/Screenshots/landing-privacy.png.png)
+*Customer privacy is baked into the architecture. Using unique **Shadow IDs**, customers can track deliveries in real-time without ever seeing rider details or other orders in the batch.*
+
+### 🏪 Merchant Portal
+The Merchant Portal provides business owners with the tools to manage their entire delivery lifecycle.
+
+#### 📊 Business Dashboard
+![Merchant Dashboard](client/public/Screenshots/edited_Screenshot%202026-05-06%20034647.png)
+*A high-level summary of active deliveries, revenue today, and order volume trends.*
+
+#### 📝 Order Management
+![Merchant Orders](client/public/Screenshots/edited_Screenshot%202026-05-06%20034929.png)
+*Complete list of current and past orders with real-time status badges and tracking links.*
+
+#### ➕ Smart Order Creation
+![New Order](client/public/Screenshots/edited_Screenshot%202026-05-06%20035146.png)
+*Intuitive form for creating new deliveries with automatic address validation and weight checks.*
+
+#### 💳 Subscription & Pricing
+![Merchant Pricing](client/public/Screenshots/edited_Screenshot%202026-05-06%20035250.png)
+*Flexible subscription plans integrated with Razorpay to keep the business running smoothly.*
+
+#### 📄 Billing & Invoices
+![Merchant Billing](client/public/Screenshots/edited_Screenshot%202026-05-06%20035338.png)
+*Detailed financial history with automated GST invoice generation and payment status tracking.*
+
+#### 🧾 Professional Invoicing
+![Sample Invoice](client/public/Screenshots/Screenshot%202026-05-06%20165441.png)
+*Example of a system-generated invoice featuring order breakdowns, tax calculations, and business branding.*
+
+### 💳 Subscription & Payments
+The platform features a robust revenue engine powered by Razorpay, ensuring seamless monetization for the service provider.
+
+#### 📈 Tiered Subscription Plans
+![Subscription Plans](client/public/Screenshots/Screenshot%202026-05-06%20163549.png)
+*Merchants can choose from Daily, Monthly, or Yearly plans. Access to the dashboard is automatically gated based on subscription status.*
+
+#### 🔐 Razorpay Gateway Integration
+![Razorpay Integration](client/public/Screenshots/Screenshot%202026-05-06%20164001.png)
+*Secure, industry-standard checkout experience with support for UPI, Cards, and Netbanking.*
+
+#### ✅ Payment Verification & Logic
+![Payment Verification](client/public/Screenshots/Screenshot%202026-05-06%20164132.png)
+*Real-time signature verification and webhook handling ensure that subscriptions are activated instantly upon successful payment.*
+
+### 🏍️ Rider Application
+The Rider App is a mobile-optimized PWA (Progressive Web App) designed for efficiency and speed on the road.
+
+#### 📋 Live Jobs Board
+![Rider Jobs](client/public/Screenshots/edited_Screenshot%202026-05-06%20041543.png)
+*Riders can see all available pending orders and accept batches that fit their current location and capacity.*
+
+#### 🛣️ Active Route & Navigation
+![Active Route](client/public/Screenshots/edited_Screenshot%202026-05-06%20042204.png)
+*Real-time GPS tracking with a sequenced stop list. The app automatically updates the customer when the rider is "Arriving Soon."*
+
+#### 💰 Earnings Transparency
+![Rider Earnings](client/public/Screenshots/edited_Screenshot%202026-05-06%20042241.png)
+*A dedicated dashboard for riders to track their daily income, total deliveries, and request instant payouts via UPI.*
+
+### 🛡️ Admin Control Tower
+The Admin Panel is the "brain" of the platform, used by the service operator to manage the entire delivery ecosystem.
+
+#### 📈 Platform Overview
+![Admin Dashboard](client/public/Screenshots/edited_Screenshot%202026-05-06%20044125.png)
+*High-level metrics for the entire platform, including total revenue, active merchants, and current delivery performance.*
+
+#### 📦 Global Order Oversight
+![Admin Orders](client/public/Screenshots/edited_Screenshot%202026-05-06%20044147.png)
+*A master list of all orders across every merchant, allowing admins to resolve issues and monitor delivery SLAs.*
+
+#### 🚴 Rider Management & Tracking
+![Admin Riders](client/public/Screenshots/edited_Screenshot%202026-05-06%20044239.png)
+*Real-time status tracking for every rider on the platform, with the ability to manage earnings and performance.*
+
+#### 🧠 Intelligent Batching Engine
+![Admin Batching](client/public/Screenshots/edited_Screenshot%202026-05-06%20044307.png)
+*The core of the platform's efficiency: clustering pending orders into optimized batches for maximum rider productivity.*
+
+#### 💳 Revenue & Subscription Control
+![Admin Billing](client/public/Screenshots/edited_Screenshot%202026-05-06%20044412.png)
+*Comprehensive financial management, tracking every subscription payment and merchant invoice on the platform.*
+
+#### 🏢 Business Onboarding
+![Admin Businesses](client/public/Screenshots/edited_Screenshot%202026-05-06%20044559.png)
+*Managing the portfolio of merchants using the platform, ensuring correct business details and geospatial zones.*
+
+---
+
 ## 🗺️ Roadmap
 
 - [ ] **Redis Pub/Sub Adapter** — Replace in-memory Socket.io with Redis for horizontal scaling across multiple server nodes
