@@ -16,16 +16,57 @@ connectDB();
 // Initialize Express
 const app = express();
 
+// Trust reverse proxy (Render, AWS, Nginx)
+app.set('trust proxy', 1);
+
+// Helper to sanitize & parse allowed origins from CLIENT_URL
+// Supports: comma-separated origins, removes accidental trailing slashes, allows localhost in dev
+const getAllowedOrigins = () => {
+  const defaults = ['http://localhost:3000', 'http://localhost:5173'];
+  if (!process.env.CLIENT_URL) return defaults;
+  return process.env.CLIENT_URL
+    .split(',')
+    .map((url) => url.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+};
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow server-to-server, curl, Postman, Render health checks (no origin header)
+    if (!origin) return callback(null, true);
+
+    const cleanOrigin = origin.replace(/\/+$/, '');
+    const allowed = getAllowedOrigins();
+
+    // Allow wildcard, exact match, or local development origins
+    if (
+      allowed.includes('*') ||
+      allowed.includes(cleanOrigin) ||
+      process.env.NODE_ENV !== 'production'
+    ) {
+      return callback(null, true);
+    }
+
+    // In production, also check if origin is a subdomain or allowed entry
+    const isMatched = allowed.some((item) => item === cleanOrigin);
+    if (isMatched) {
+      return callback(null, true);
+    }
+
+    console.warn(`⚠️ CORS blocked request from origin: ${origin}`);
+    return callback(new Error(`CORS policy does not allow access from ${origin}`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+};
+
 // Create HTTP server for Socket.io
 const server = http.createServer(app);
 
 // Initialize Socket.io
 const io = new Server(server, {
-  cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-    credentials: true,
-  },
+  cors: corsOptions,
 });
 
 // Make io accessible to routes via req.app.get('io')
@@ -36,12 +77,7 @@ app.set('io', io);
 // ============================================================
 
 app.use(helmet());
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 // Razorpay webhook needs raw body for signature verification — must come before express.json()
 app.use('/api/subscription/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
@@ -60,11 +96,13 @@ app.use('/api/businesses', require('./routes/businesses'));
 app.use('/api/subscription', require('./routes/subscription'));
 app.use('/api/public', require('./routes/public')); // No auth - public tracking
 
-// Health check
-app.get('/api/health', (req, res) => {
+// Health check & ping routes (Supports Render health check, uptime monitors, and root ping)
+app.get(['/', '/health', '/api/health'], (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Apna Saathi API is running',
+    service: 'Apna Saathi Backend API',
+    status: 'healthy',
+    environment: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString(),
   });
 });
@@ -200,13 +238,14 @@ io.on('connection', (socket) => {
 // ============================================================
 
 const PORT = process.env.PORT || 5000;
+const HOST = '0.0.0.0';
 
-server.listen(PORT, () => {
+server.listen(PORT, HOST, () => {
   console.log(`
   ╔════════════════════════════════════════════════╗
   ║                                                ║
   ║   🚀 Apna Saathi API Server                    ║
-  ║   📡 Running on port ${PORT}                      ║
+  ║   📡 Running on http://${HOST}:${PORT}          ║
   ║   🌍 Environment: ${process.env.NODE_ENV || 'development'}                ║
   ║   🔌 Socket.io: Ready                          ║
   ║                                                ║

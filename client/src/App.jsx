@@ -159,13 +159,13 @@ export default function App() {
         <Route path="earnings" element={<RiderEarnings />} />
       </Route>
 
-      {/* Catch all */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-
       {/* ──────────────────────────────────────────────────────── */}
       {/* PUBLIC ROUTE — No auth wrapper, accessible by anyone    */}
       {/* ──────────────────────────────────────────────────────── */}
       <Route path="/track/:trackingId" element={<PublicTracker />} />
+
+      {/* Catch all — MUST be last */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

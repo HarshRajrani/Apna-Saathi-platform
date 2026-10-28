@@ -1,0 +1,66 @@
+# Rider Execution Portal & Real-Time Tracking
+
+This plan outlines the architecture and tasks required to build the mobile-first Rider Portal, integrating role-based gateways, a batched jobs board, active routing, secure OTP handshake, and realtime GPS tracking via Socket.io.
+
+## User Review Required
+
+> [!WARNING]
+> Please review the new API routes and the proposed frontend URL structure (`/rider/jobs`, `/rider/active`). Let me know if you have different design preferences for the Rider Bottom Navigation items!
+
+## Proposed Changes
+
+---
+
+### Backend (`server/routes/`)
+
+#### [MODIFY] [orders.js](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/server/routes/orders.js)
+- **Add** `GET /api/orders/batches/available`: Fetch orders where `status: 'pending'` and `batchId` exists, aggregating them to show total distance, earnings, and stops.
+- **Add** `POST /api/orders/verify-otp`: Secure OTP handshake. Validates the provided OTP for a specific order and changes its status (to `picked_up` or `delivered`), emitting `order:statusChanged` via Socket.io.
+
+#### [MODIFY] [riders.js](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/server/routes/riders.js)
+- **Add** `PATCH /api/riders/accept-batch`: Associates a batch of orders to the logged-in rider. Updates `Rider.activeOrders`, changes order statuses to `assigned`, and emits `order:assigned` to merchants.
+
+---
+
+### Frontend (`client/`)
+
+#### [MODIFY] [App.jsx](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/client/src/App.jsx)
+- **Add** Role-based redirection logic: if `user.role === 'rider'`, navigate to `/rider/jobs`.
+- **Add** `<Route>` wrappers for Rider Protected Routes.
+
+#### [NEW] [RiderLayout.jsx](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/client/src/rider/RiderLayout.jsx)
+- A mobile-first layout hiding standard sidebars.
+- Exclusively uses a sticky bottom navigation bar with icons for: Jobs, Active Batch, Profile, and Earnings.
+
+#### [NEW] [JobsBoard.jsx](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/client/src/rider/JobsBoard.jsx)
+- Fetches and displays available batches.
+- Subcomponent: **JobCard** mapping total distance, earnings, stop details.
+- Action: "Accept Batch" hitting the backend API. Touch-friendly UI.
+
+#### [NEW] [ActiveRoute.jsx](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/client/src/rider/ActiveRoute.jsx)
+- Maps the active batch into a step-by-step sequence (Pickup A -> Pickup B -> Drop A).
+- Displays 'Open in Maps' (deep linking via `google.com/maps`).
+- Action: "Verify Stop" button which invokes an OTP Keypad Dialog.
+
+#### [NEW] [useRiderLocation.js](file:///c:/Users/karan/OneDrive/Desktop/Delivery-Partner/client/src/hooks/useRiderLocation.js)
+- React hook subscribing to `navigator.geolocation.watchPosition()`.
+- Emits Socket.io event (`rider:locationUpdate`) containing `riderId`, `lat`, `lng`, and `activeBatchId` every 10 seconds.
+- Connects rider to specific socket rooms per `batchId`.
+
+## Open Questions
+
+> [!IMPORTANT]
+> 1. The requirements mention distance calculation. Should the distance be calculated dynamically on the backend when querying batches, or should it be pre-calculated when the batch is created? (For now, I'll calculate it via basic coordinate math or mock values during aggregation).
+> 2. What color scheme do you prefer for the Rider portal? (Defaulting to the existing Tailwind primary).
+
+## Verification Plan
+
+### Automated / API Tests
+- Use local development server to test GET/PATCH batch routes.
+- Validate OTP rejection logic if input doesn't match `order.otp`.
+
+### Manual UI Verification
+- Simulate mobile dimensions in Browser DevTools.
+- Verify Bottom Navigation logic across routing.
+- Test the Job Acceptance lifecycle flow.
+- Ensure geolocation tracking prompts work and emit correctly mapped backend socket events.

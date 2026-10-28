@@ -145,7 +145,7 @@ Rider App                    Server                     Customer Browser
 
 ### 💳 Subscription & Billing Engine
 - **Razorpay integration** for payment processing
-- **Three subscription tiers**: Daily (₹29), Monthly (₹499), and Yearly (₹4,999)
+- **Three subscription tiers**: Daily (₹99), Monthly (₹2,499), and Yearly (₹19,999)
 - **Subscription gate**: Merchants without an active subscription are redirected to the pricing page
 - **Webhook verification**: Razorpay webhooks are verified using HMAC-SHA256 signature validation
 - **Auto-generated invoices**: Invoice numbers follow `INV0001` format with GST (18%) calculation
@@ -356,6 +356,12 @@ The app will be available at `http://localhost:3000`
 | Admin | admin@apnasaathi.com | *(value of SEED_PASSWORD in .env)* |
 | Merchant | rajesh@apnasaathi.com | *(value of SEED_PASSWORD in .env)* |
 | Rider | suresh@apnasaathi.com | *(value of SEED_PASSWORD in .env)* |
+
+### 5. Production Cloud Deployment (Render)
+
+The backend is fully configured for deployment on [Render](https://render.com) using Infrastructure-as-Code (`render.yaml`) or manual configuration:
+
+👉 **[Read the Complete Render Deployment Guide](RENDER_DEPLOYMENT.md)**
 
 ---
 

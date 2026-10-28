@@ -50,7 +50,7 @@ function authReducer(state, action) {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const [isOnline, setIsOnline] = useState(true); // Default to true or fetch from DB
+  const [isOnline, setIsOnline] = useState(false); // Synced from DB on mount
 
   // Load user on mount if token exists
   useEffect(() => {
@@ -59,6 +59,18 @@ export function AuthProvider({ children }) {
         try {
           const res = await getMe();
           dispatch({ type: 'USER_LOADED', payload: res.data.user });
+
+          // Sync rider online status from DB
+          if (res.data.user.role === 'rider') {
+            try {
+              const riderRes = await API.get('/riders/me');
+              if (riderRes.data.success) {
+                setIsOnline(riderRes.data.data.status !== 'offline');
+              }
+            } catch (e) {
+              // Rider profile fetch failed — keep default
+            }
+          }
         } catch (err) {
           dispatch({ type: 'AUTH_ERROR' });
         }

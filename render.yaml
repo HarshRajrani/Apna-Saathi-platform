@@ -1,0 +1,36 @@
+# ============================================================
+# Render Blueprint Configuration (render.yaml)
+# Project: Apna Saathi - Backend Web Service
+# Docs: https://render.com/docs/blueprint-spec
+# ============================================================
+
+services:
+  # Backend API Web Service
+  - type: web
+    name: apna-saathi-backend
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false # Provide your MongoDB Atlas URI in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true # Auto-generated secure random key by Render
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: CLIENT_URL
+        sync: false # Set to frontend URL (e.g. https://apna-saathi.vercel.app or http://localhost:3000)
+      - key: RAZORPAY_KEY_ID
+        sync: false # Optional / your Razorpay Key ID
+      - key: RAZORPAY_KEY_SECRET
+        sync: false # Optional / your Razorpay Secret
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false # Optional / your Razorpay Webhook Secret
+      - key: SEED_PASSWORD
+        value: Password123! # Default password for seeded accounts

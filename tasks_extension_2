@@ -1,0 +1,5 @@
+# Merchant Portal Extension Tasks
+
+- `[x]` **Phase 5: Merchant Dashboard** - Convert the empty dashboard stub into a live statistics and activity center.
+- `[x]` **Phase 6: Merchant Billing** - Convert the empty billing stub into an Invoice tracker.
+- `[x]` **Phase 7: Database Sync** - Update `seed.js` to link `owner` to `businessId` naturally for sample data logging.
